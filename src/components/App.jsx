@@ -69,15 +69,15 @@ class App extends React.Component {
       <div>
         <nav className="navbar">
           <div className="col-md-6 offset-md-3">
-            <div><h5><em>search</em>     <Search  onSearchChange={this.onSearchChange}/>   </h5></div>
+            <Search  onSearchChange={this.onSearchChange}/>
           </div>
         </nav>
         <div className="row">
           <div className="col-md-7">
-            <div><h5><em>videoPlayer</em> <VideoPlayer video={this.state.currentVideo} /> </h5></div>
+            <VideoPlayer video={this.state.currentVideo} />
           </div>
           <div className="col-md-5">
-            <div><h5><em>videoList</em> <VideoList clickFunction={this.onVideoTitleClick}  videos={this.state.videoList} /> </h5></div>
+            <VideoList clickFunction={this.onVideoTitleClick}  videos={this.state.videoList} />
           </div>
         </div>
       </div>
