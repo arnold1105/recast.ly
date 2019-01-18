@@ -1,7 +1,10 @@
 import VideoList from './VideoList.js';
 import exampleVideoData from '../data/exampleVideoData.js';
 import VideoPlayer from './VideoPlayer.js';
-import Search from './Search.js'
+import Search from './Search.js';
+import YOUTUBE_API_KEY from '../config/youtube.js';
+
+
 
 class App extends React.Component {
   constructor(props){
@@ -11,37 +14,75 @@ class App extends React.Component {
       currentVideo: exampleVideoData[0],
       videoList: exampleVideoData
     }
-   this.onVideoTitleClick = this.onVideoTitleClick.bind(this);
+    this.onVideoTitleClick = this.onVideoTitleClick.bind(this);
+    this.onSearchChange = this.onSearchChange.bind(this);
   }
 
- onVideoTitleClick(video){
-   // console log testing
-   console.log('IT WORKS!!!!!!!!', video);
-   this.setState({
+  componentDidMount(){
+    const options = {
+      query: '',
+      key: YOUTUBE_API_KEY,
+      max: 5
+    };
+ 
+    // VIDEOS ARE JUST THE FIVE ITEMS IN THIS CASE FROM VIDEO.ITEMS IN THE SEARCHYOUTUBE FILE
+    this.props.searchYouTube(
+      options,
+      (videos) => {
+        this.setState({
+          currentVideo: videos[0],
+          videoList: videos
+        });
+      }
+    );
+  }
+
+  // in work to redo search
+  onSearchChange(query) {
+    // IN PROGRESS 
+    const options = {
+      query: query,
+      key: YOUTUBE_API_KEY,
+      max: 5
+    };
+ 
+    this.props.searchYouTube(
+      options,
+      (videos) => {
+        this.setState({
+          currentVideo: videos[0],
+          videoList: videos
+        });
+      }
+    );
+  }
+
+  onVideoTitleClick(video){
+    this.setState({
      currentVideo: video
-   })
- }
+    });
+  }
+
 
   render() {
-
-   return (  
-    <div>
-      <nav className="navbar">
-        <div className="col-md-6 offset-md-3">
-          <div><h5><em>search</em>     <Search/>   </h5></div>
-        </div>
-      </nav>
-      <div className="row">
-        <div className="col-md-7">
-          <div><h5><em>videoPlayer</em> <VideoPlayer video={this.state.currentVideo} /> </h5></div>
-        </div>
-        <div className="col-md-5">
-          <div><h5><em>videoList</em> <VideoList clickFunction={this.onVideoTitleClick}  videos={exampleVideoData} /> </h5></div>
+    return (  
+      <div>
+        <nav className="navbar">
+          <div className="col-md-6 offset-md-3">
+            <div><h5><em>search</em>     <Search  onSearchChange={this.onSearchChange}/>   </h5></div>
+          </div>
+        </nav>
+        <div className="row">
+          <div className="col-md-7">
+            <div><h5><em>videoPlayer</em> <VideoPlayer video={this.state.currentVideo} /> </h5></div>
+          </div>
+          <div className="col-md-5">
+            <div><h5><em>videoList</em> <VideoList clickFunction={this.onVideoTitleClick}  videos={this.state.videoList} /> </h5></div>
+          </div>
         </div>
       </div>
-    </div>
-  )
- }
+    );
+  }
 };
 
 // In the ES6 spec, files are "modules" and do not share a top-level scope
